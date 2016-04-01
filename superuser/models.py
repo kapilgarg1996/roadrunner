@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import connection
+from superuser.forms import *
 
 #-----Model Class Initialization-------------
 from django.conf import settings
@@ -28,4 +29,13 @@ class UserTemp(User):
     def __str__(self):
         return self.validation_key.key_data
 
+    def to_dict(self):
+        form = FormTemp()
+        formlist = form.fields.keys()
+        selflist = self._meta.get_fields()
+        data = {}
+        for field in selflist:
+            if field.name in formlist:
+                data[field.name] = getattr(self, field.name)
+        return data
 

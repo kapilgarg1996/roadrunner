@@ -12,6 +12,7 @@ from runner import forms
 from rest_framework import viewsets
 from MySQLdb.cursors import SSDictCursor
 from django.core.mail import send_mail
+from runner.models import *
 
 #from django.core.mail import send_mail
 
@@ -126,3 +127,10 @@ def get_user_detail(request, id):
     queryset = dictfetchall(cursor)
     result = UserDetailSerializer(queryset, many=True)
     return Response(result.data)
+
+
+
+def user_saver(request, userdata):
+    user = User(**userdata)
+    user.save()
+

@@ -11,4 +11,4 @@ FormApp = importlib.import_module('.'.join(setlist[:-1]))
 CForm = getattr(FormApp, setlist[-1])
 
 class FormTemp(CForm):
-    validation_key = forms.CharField(required=False)
+    pass

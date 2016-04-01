@@ -31,6 +31,7 @@ SUPERUSER_USER = 'runner.models.UserAbstract'
 SUPERUSER_PRIMARY = 'name'
 SUPERUSER_FORM = 'runner.forms.UserSignupForm'
 SUPERUSER_MAIL = 'email'
+SUPERUSER_HANDLER = 'runner.views.user_saver'
 
 INSTALLED_APPS = [
     'bus.apps.BusConfig',

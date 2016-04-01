@@ -8,7 +8,7 @@ urlpatterns = [
         url(r'^login/', views.login, name='login'),
         url(r'^login-form/', views.login_form, name='login_form'),
         url(r'^password-reset/', views.password_reset, name='password_reset'),
-        url(r'^confirm-signup/', views.confirm_signup, name='confirm_signup'),
+        url(r'^signup-confirm/', views.confirm_signup, name='confirm_signup'),
         url(r'^confirm-password/', views.confirm_password, name='confirm_password'),
 ]
 

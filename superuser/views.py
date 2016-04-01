@@ -12,6 +12,12 @@ from .models import *
 from datetime import datetime, timedelta
 from .forms import *
 import hashlib
+from django.conf import settings
+import importlib
+from django.utils import timezone
+setlist = settings.SUPERUSER_HANDLER.split('.')
+modules = importlib.import_module('.'.join(setlist[:-1]))
+data_handler = getattr(modules, setlist[-1])
 
 def test_view(request):
     return HttpResponse("In superuser")
@@ -43,7 +49,9 @@ def signup(request):
             usertemp.save()
             return HttpResponse('Temp created')
         else:
-            return HttpResponse('What are you doing here ? Tresspass')
+            return HttpResponse('Invalid Data')
+    else:
+        return HttpResponse('What are you doing here ? Tresspass')
 
 def signup_form(request):
     pass
@@ -58,7 +66,21 @@ def login_form(reuqest):
     pass
 
 def confirm_signup(request):
-    pass
+    if request.method=='GET':
+        key = request.GET['key']
+        if(key):
+            valid_key = Validation.objects.get(key_data=key)
+            nowtime = timezone.make_aware(datetime.now(), timezone.get_default_timezone())
+            if(valid_key and nowtime<valid_key.expire_time):
+                data_handler(request, UserTemp.objects.get(validation_key=valid_key.key).to_dict())
+                return HttpResponse("User registered")
+            else:
+                return HttpResponse("Key has expired. Create a new account")
+        else:
+            return HttpResponse("Corrupted url")
+    else:
+        return HttpResponse("Tresspass")
+
 
 def confirm_password(reuqest):
     pass
