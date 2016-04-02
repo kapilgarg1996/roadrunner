@@ -47,6 +47,8 @@ class UserTemp(User):
 class PassRequest(models.Model):
     user = models.ForeignKey(UserTemp, models.DO_NOTHING, default='', related_name='+')
     validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
+    pending = models.BooleanField(default=True)
+    request_verified = models.BooleanField(default=False)
     
     def __str__(self):
         return self.validation_key.key_data

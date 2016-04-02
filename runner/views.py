@@ -138,3 +138,10 @@ def user_saver(request, userdata):
     user = User(**userdata)
     user.save()
 
+def pass_handler(uid=0, password=''):
+    try:
+        user = User.objects.get(id=uid)
+        user.password = password
+        user.save()
+    except:
+        pass

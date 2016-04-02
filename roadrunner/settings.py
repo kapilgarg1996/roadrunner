@@ -36,6 +36,9 @@ SUPERUSER_LFORM = 'runner.forms.LoginForm'
 SUPERUSER_LOGLIST = ['name', 'password']
 SUPERUSER_PRFIELDS = ['name', 'email']
 SUPERUSER_PRFORM = 'runner.forms.Password'
+SUPERUSER_PASSFIELD = 'password'
+SUPERUSER_PHANDLER = 'runner.views.pass_handler'
+SUPERUSER_FORMTEMPLATE = 'runner/password.html'
 
 INSTALLED_APPS = [
     'bus.apps.BusConfig',

@@ -27,3 +27,9 @@ class LFormTemp(LForm):
 
 class PRForm(PForm):
     pass
+
+class PassForm(forms.Form):
+    key_field = forms.CharField(max_length=200, widget=forms.HiddenInput(), required=False)
+    new_pass = forms.CharField(max_length=100)
+    repeat_pass = forms.CharField(max_length=100)
+
