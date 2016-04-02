@@ -106,7 +106,7 @@ class Stop(models.Model):
 
 
 class UserAbstract(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True, default=1)  # Field name made lowercase.
+    uid = models.AutoField(db_column='ID', primary_key=True, default=1)  # Field name made lowercase.
     name = models.CharField(db_column='NAME', max_length=100, default='')  # Field name made lowercase.
     password = models.CharField(db_column='PASSWORD', max_length=20, default='')  # Field name made lowercase.
     credit_card = models.CharField(db_column='CREDIT_CARD', max_length=25, default='')  # Field name made lowercase.

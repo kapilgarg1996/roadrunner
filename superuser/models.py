@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import connection
 from superuser.forms import *
+def get_user_file(instance, filename):
+    return 'users/{0}_{1}_{2}'.format(instance.name, instance.email, filename)
 
 #-----Model Class Initialization-------------
 from django.conf import settings
@@ -23,7 +25,8 @@ class Validation(models.Model):
         return self.key_data
 
 @python_2_unicode_compatible
-class UserTemp(User):
+class UserTemp(User):    
+
     validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
     verified = models.BooleanField(default=False)
     def __str__(self):

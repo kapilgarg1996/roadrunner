@@ -28,10 +28,14 @@ ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
-SUPERUSER_PRIMARY = 'name'
+SUPERUSER_PRIMARY = 'email'
 SUPERUSER_FORM = 'runner.forms.UserSignupForm'
 SUPERUSER_MAIL = 'email'
 SUPERUSER_HANDLER = 'runner.views.user_saver'
+SUPERUSER_LFORM = 'runner.forms.LoginForm'
+SUPERUSER_LOGLIST = ['name', 'password']
+SUPERUSER_PRFIELDS = ['name', 'email']
+SUPERUSER_PRFORM = 'runner.forms.Password'
 
 INSTALLED_APPS = [
     'bus.apps.BusConfig',

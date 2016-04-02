@@ -95,7 +95,7 @@ def login_form(request):
     else:
         form = forms.LoginForm()
 
-    return render(request, 'runner/signup.html', {'form':form})
+    return render(request, 'runner/login.html', {'form':form})
 
 def test(request):
     return render(request, 'runner/test.html')
