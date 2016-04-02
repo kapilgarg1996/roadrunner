@@ -67,7 +67,7 @@ def signup(request):
             else:
                 usertemp = UserTemp(**argsdict)
                 usertemp.save()
-                return HttpResponse(usertemp.id)
+                return HttpResponse(confirm_key)
         else:
             return HttpResponse('Invalid Data')
     else:
@@ -79,7 +79,28 @@ def password_reset(request):
         form = PRForm(request.POST)
         if form.is_valid():
             fields = settings.SUPERUSER_PRFIELDS
+            args = {}
+            for field in fields:
+                args[field] = form.cleaned_data[field]
 
+            args['verified'] = True
+            try:
+                user = UserTemp.objects.get(**args)
+                
+                email = form.cleaned_data[settings.SUPERUSER_MAIL]
+                signer = hashlib.sha256()
+                signer.update(str(timezone.now()))
+                validation_key = signer.hexdigest()
+                confirm_key = request.build_absolute_uri('/password-confirm/')+'?key='+validation_key
+                #send_mail('Confirm Your Mail', confirm_key, settings.EMAIL_HOST_USER, [email,])
+
+                valid = Validation(key_data=validation_key, create_time=datetime.now(), expire_time=datetime.now()+timedelta(days=30))
+                valid.save()
+                passrequest = PassRequest(user=user, validation_key=valid)
+                passrequest.save()
+                return HttpResponse(confirm_key)
+            except:
+                return HttpResponse("Wrong Credentials")
 
 def login(request):
     if request.method=='POST':

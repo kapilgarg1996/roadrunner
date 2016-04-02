@@ -16,6 +16,10 @@ from runner.models import *
 
 #from django.core.mail import send_mail
 
+def change_password(request):
+    form = forms.Password()
+    return render(request, 'runner/pass.html', {'form':form})
+
 def send_email(user, pwd, recipient, subject, body):
     import smtplib
 

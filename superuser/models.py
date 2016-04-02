@@ -42,3 +42,11 @@ class UserTemp(User):
                 data[field.name] = getattr(self, field.name)
         return data
 
+
+@python_2_unicode_compatible
+class PassRequest(models.Model):
+    user = models.ForeignKey(UserTemp, models.DO_NOTHING, default='', related_name='+')
+    validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
+    
+    def __str__(self):
+        return self.validation_key.key_data
