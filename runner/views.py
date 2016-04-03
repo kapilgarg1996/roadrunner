@@ -138,10 +138,21 @@ def user_saver(request, userdata):
     user = User(**userdata)
     user.save()
 
-def pass_handler(uid=0, password=''):
-    try:
-        user = User.objects.get(id=uid)
-        user.password = password
-        user.save()
-    except:
-        pass
+def pass_handler(uid='', password=''):
+    user = User.objects.get(email=uid)
+    user.password = password
+    user.save()
+
+
+def generate_form(request):
+    form = forms.AuthForm()
+    return render(request, 'runner/form.html', {'form':form})
+
+def authorize_form(request):
+    form = forms.TokenForm()
+    return render(request, 'runner/anform.html', {'form':form})
+
+def enter_pass(request):
+    form = forms.PassForm()
+    return render(request, 'runner/passform.html', {'form':form})
+

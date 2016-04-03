@@ -80,10 +80,3 @@ def authorize(request):
         response.status_code = 405
         return response
 
-def generate_form(request):
-    form = AuthForm()
-    return render(request, 'e_auth/form.html', {'form':form})
-
-def authorize_form(request):
-    form = TokenForm()
-    return render(request, 'e_auth/anform.html', {'form':form})

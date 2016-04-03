@@ -25,9 +25,6 @@ setlist = settings.SUPERUSER_PHANDLER.split('.')
 modules = importlib.import_module('.'.join(setlist[:-1]))
 pass_handler = getattr(modules, setlist[-1])
 
-def enter_pass(request):
-    form = PassForm()
-    return render(request, 'superuser/passform.html', {'form':form})
 
 @api_view(['POST'])
 def signup(request):
@@ -59,7 +56,7 @@ def signup(request):
             signer = hashlib.sha256()
             signer.update(primary)
             validation_key = signer.hexdigest()
-            confirm_key = request.build_absolute_uri('/signup-confirm/')+'?key='+validation_key
+            confirm_key = request.build_absolute_uri('/superuser/signup-confirm/')+'?key='+validation_key
             send_mail('Confirm Your Mail', confirm_key, settings.EMAIL_HOST_USER, [email,'kapilgarg1996@gmail.com'])
             if only_update:
                 data['status'] = 200
@@ -137,7 +134,7 @@ def password_reset(request):
                 signer = hashlib.sha256()
                 signer.update(str(timezone.now()))
                 validation_key = signer.hexdigest()
-                confirm_key = request.build_absolute_uri('/password-confirm/')+'?key='+validation_key
+                confirm_key = request.build_absolute_uri('/superuser/password-confirm/')+'?key='+validation_key
                 send_mail('Confirm Your Mail', confirm_key, settings.EMAIL_HOST_USER, [email,'kapilgarg1996@gmail.com'])
 
                 valid = Validation(key_data=validation_key, create_time=datetime.now(), expire_time=datetime.now()+timedelta(days=30))
@@ -357,7 +354,7 @@ def confirm_password(request):
                 pass_req.save()
                 setattr(user, settings.SUPERUSER_PASSFIELD, npass)
                 user.save()
-                pass_handler(uid=user.id, password=npass)
+                pass_handler(uid=getattr(user, settings.SUPERUSER_PRIMARY), password=npass)
                 data['status'] = 200
                 data['detail'] = 'Password Changed'
                 data['request'] = 'PASSWORD_CHANGED'

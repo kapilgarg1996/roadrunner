@@ -30,7 +30,8 @@ class UserTemp(User):
     validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
     verified = models.BooleanField(default=False)
     def __str__(self):
-        return self.validation_key.key_data
+        primary = settings.SUPERUSER_PRIMARY
+        return getattr(self, primary)
 
     def to_dict(self):
         form = FormTemp()
@@ -51,4 +52,4 @@ class PassRequest(models.Model):
     request_verified = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.validation_key.key_data
+        return getattr(self.user, settings.SUPERUSER_PRIMARY)

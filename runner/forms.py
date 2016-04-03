@@ -27,3 +27,17 @@ class UserSignupForm(ModelForm):
     class Meta:
         model = User
         exclude = ('id',)
+
+class AuthForm(forms.Form):
+    name = forms.CharField()
+    password = forms.CharField()
+
+class TokenForm(forms.Form):
+    token = forms.CharField(max_length=200)
+
+class PassForm(forms.Form):
+    key_field = forms.CharField(max_length=200)
+    new_pass = forms.CharField(max_length=100)
+    repeat_pass = forms.CharField(max_length=100)
+
+
