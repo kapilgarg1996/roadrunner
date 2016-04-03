@@ -22,6 +22,7 @@ import account
 urlpatterns = [
     url(r'^bus/', include('bus.urls')),
     url(r'^superuser/', include('superuser.urls')),
+    url(r'^e-auth/', include('e_auth.urls')),
     url(r'^runner/', include('runner.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -1,5 +1,6 @@
-<form enctype="multipart/form-data" action='/superuser/signup/' method='post'>
+<form enctype="multipart/form-data" action='/e-auth/generate_token/' method='post'>
 	{% csrf_token %}
 	{{ form.as_table }}
 	<input type='submit' value='signup'/>
 </form>
+

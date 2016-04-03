@@ -26,6 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
+EAUTH_USER = 'runner.models.User'
+EAUTH_FIELDS = ['name', 'password']
+
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
 SUPERUSER_PRIMARY = 'name'
@@ -33,6 +36,7 @@ SUPERUSER_FORM = 'runner.forms.UserSignupForm'
 SUPERUSER_MAIL = 'email'
 
 INSTALLED_APPS = [
+    'e_auth.apps.EAuthConfig',
     'bus.apps.BusConfig',
     'taxi.apps.TaxiConfig',
     'superuser.apps.SuperuserConfig',
