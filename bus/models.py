@@ -87,9 +87,13 @@ class Stop(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='NAME', max_length=100, default='')  # Field name made lowercase.
     city = models.CharField(db_column='CITY', max_length=100, default='')  # Field name made lowercase.
+    state = models.CharField(db_column='STATE', max_length=100, default='')
+    pincode = models.CharField(db_column='PINCODE', max_length=16, default='')
     def __str__(self):
         return self.name+"-"+self.city
 
+    def get_location(self):
+        return self.name+" "+self.city+" "+self.state+" "+self.pincode
     class Meta:
         managed = True
         db_table = 'Stop'
