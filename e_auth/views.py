@@ -18,18 +18,18 @@ User = getattr(UserApp, setlist[-1])
 
 @api_view(['POST'])
 def generate_token(request):
-    response = Response(status=405)
+    response = Response()
     if request.method=='POST':
-        response.status = 404
+        response.status_code = 404
         fieldlist = settings.EAUTH_FIELDS
         argsdict = {}
         for field in fieldlist:
             argsdict[field] = request.POST.get(field)
         try:
             user = User.objects.get(**argsdict)
-            response.status = 200
+            response.status_code = 200
         except:
-            response.status = 404
+            response.status_code = 404
             return response
         
         signer = hashlib.sha256()
@@ -44,7 +44,7 @@ def generate_token(request):
 
         auth.auth_token = validation_key
         auth.create_time = timezone.now()
-        auth.expire_time = timezone.now() + timedelta(days=30)
+        auth.expire_time = timezone.now() + timedelta(minutes=30)
         auth.save()
 
         data = {'status':200, 'token':validation_key}
@@ -58,8 +58,32 @@ def generate_token(request):
 
 @api_view(['POST'])
 def authorize(request):
-    pass
+    response = Response()
+    if request.method == 'POST':
+        token = request.POST['token']
 
-def testform(request):
+        try:
+            auth = Authorize.objects.get(auth_token=token)
+            if(timezone.now() < auth.expire_time):
+                data = {'status':200, 'authorized':True}
+            else:
+                data['authorized'] = False
+
+            sdata = AuthSerializer(data)
+            response.data = sdata.data
+            response.status_code = 200
+            return response
+        except:
+            response.status_code = 404
+            return response
+    else:
+        response.status_code = 405
+        return response
+
+def generate_form(request):
     form = AuthForm()
     return render(request, 'e_auth/form.html', {'form':form})
+
+def authorize_form(request):
+    form = TokenForm()
+    return render(request, 'e_auth/anform.html', {'form':form})

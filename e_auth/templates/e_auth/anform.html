@@ -1,0 +1,7 @@
+<form enctype="multipart/form-data" action='/e-auth/authorize/' method='post'>
+	{% csrf_token %}
+	{{ form.as_table }}
+	<input type='submit' value='signup'/>
+</form>
+
+
