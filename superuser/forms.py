@@ -10,5 +10,26 @@ setlist = settings.SUPERUSER_FORM.split('.')
 FormApp = importlib.import_module('.'.join(setlist[:-1]))
 CForm = getattr(FormApp, setlist[-1])
 
+setlist = settings.SUPERUSER_LFORM.split('.')
+FormApp = importlib.import_module('.'.join(setlist[:-1]))
+LForm = getattr(FormApp, setlist[-1])
+
+
+setlist = settings.SUPERUSER_PRFORM.split('.')
+FormApp = importlib.import_module('.'.join(setlist[:-1]))
+PForm = getattr(FormApp, setlist[-1])
+
 class FormTemp(CForm):
-    validation_key = forms.CharField(required=False)
+    pass
+
+class LFormTemp(LForm):
+    pass
+
+class PRForm(PForm):
+    pass
+
+class PassForm(forms.Form):
+    key_field = forms.CharField(max_length=200)
+    new_pass = forms.CharField(max_length=100)
+    repeat_pass = forms.CharField(max_length=100)
+

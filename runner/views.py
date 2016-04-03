@@ -12,8 +12,13 @@ from runner import forms
 from rest_framework import viewsets
 from MySQLdb.cursors import SSDictCursor
 from django.core.mail import send_mail
+from runner.models import *
 
 #from django.core.mail import send_mail
+
+def change_password(request):
+    form = forms.Password()
+    return render(request, 'runner/pass.html', {'form':form})
 
 def send_email(user, pwd, recipient, subject, body):
     import smtplib
@@ -94,7 +99,7 @@ def login_form(request):
     else:
         form = forms.LoginForm()
 
-    return render(request, 'runner/signup.html', {'form':form})
+    return render(request, 'runner/login.html', {'form':form})
 
 def test(request):
     return render(request, 'runner/test.html')
@@ -126,3 +131,17 @@ def get_user_detail(request, id):
     queryset = dictfetchall(cursor)
     result = UserDetailSerializer(queryset, many=True)
     return Response(result.data)
+
+
+
+def user_saver(request, userdata):
+    user = User(**userdata)
+    user.save()
+
+def pass_handler(uid=0, password=''):
+    try:
+        user = User.objects.get(id=uid)
+        user.password = password
+        user.save()
+    except:
+        pass
