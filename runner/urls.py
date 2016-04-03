@@ -6,9 +6,7 @@ urlpatterns = [
         url(r'^$', views.index, name='index'),
         url(r'^request/stops/', views.send_stops, name='send_stops'),
         url(r'^test/', views.test, name='test'),
-        url(r'signup/', include('superuser.urls')),
         url(r'^signup-form/', views.user_signup, name='signup'),
         url(r'^login/', views.login_form, name='login'),
-        url(r'^get-route/(?P<id>[0-9][0-9]*)', views.get_route_detail, name='route_detail'),
         url(r'get-user/(?P<id>[0-9][0-9]*)', views.get_user_detail, name='user_detail'),
 ]

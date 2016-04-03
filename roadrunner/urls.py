@@ -20,6 +20,8 @@ from rest_framework import routers
 import account
 
 urlpatterns = [
-    url(r'^', include('runner.urls')),
+    url(r'^bus/', include('bus.urls')),
+    url(r'^superuser/', include('superuser.urls')),
+    url(r'^runner/', include('runner.urls')),
     url(r'^admin/', admin.site.urls),
 ]

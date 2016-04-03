@@ -6,7 +6,6 @@ from runner.queries import *
 import json
 #from runner.serializers import StopSerializer, RouteSerializer, RouteDetailSerializer
 from runner.serializers import *
-from bus.models import Stop, Route
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from runner import forms
@@ -119,8 +118,6 @@ def user_signup(request):
 
 
 @api_view(['GET'],)
-
-
 def get_user_detail(request, id):
     cursor = connection.cursor()
     uid = id

@@ -1,5 +1,4 @@
 from django import forms
-from bus.models import Stop
 from django.contrib.admin import widgets  
 from django.forms import ModelForm
 from runner.models import User
@@ -14,10 +13,6 @@ class LoginForm(forms.Form):
     #        if first_pass != rep_pass:
     #            raise forms.ValidationError('Passwords must match')
 
-class RouteForm(forms.Form):
-    source = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
-    dest = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
-    time = forms.DateTimeField()
 
 class UserSignupForm(ModelForm):
     class Meta:
