@@ -1,0 +1,7 @@
+<form enctype="multipart/form-data" action='/taxi/book-taxi/' method='post'>
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type='submit' value='signup'/>
+</form>
+
+

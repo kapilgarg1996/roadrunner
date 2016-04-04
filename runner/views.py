@@ -143,6 +143,9 @@ def pass_handler(uid='', password=''):
     user.password = password
     user.save()
 
+def taxi_form(request):
+    form = forms.BookingForm()
+    return render(request, 'runner/taxi.html', {'form':form})
 
 def generate_form(request):
     form = forms.AuthForm()

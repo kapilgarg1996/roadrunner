@@ -3,6 +3,7 @@ from django.contrib.admin import widgets
 from django.forms import ModelForm
 from runner.models import User
 from bus.models import *
+from taxi.models import *
 class LoginForm(forms.Form):
     name = forms.CharField(label='Your Name', max_length=100)
     password = forms.CharField(label='Password', max_length=20, widget=forms.PasswordInput())
@@ -40,4 +41,8 @@ class PassForm(forms.Form):
     new_pass = forms.CharField(max_length=100)
     repeat_pass = forms.CharField(max_length=100)
 
+class BookingForm(ModelForm):
+    class Meta:
+        model = Booking
+        fields = ('user', 'taxi', 'payment_status', 'journey_time', 'source', 'dest')
 
