@@ -27,68 +27,44 @@ def get_user_file(instance, filename):
 
 @python_2_unicode_compatible
 class Bus(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    number = models.CharField(db_column='NUMBER', max_length=15, default='0')  # Field name made lowercase.
-    ac = models.BooleanField(db_column='AC', default=False)  # Field name made lowercase.
-    seater = models.BooleanField(db_column='SEATER', default=True)  # Field name made lowercase.
-    total_seats = models.IntegerField(db_column='TOTAL_SEATS', default='56')  # Field name made lowercase.
-    available = models.BooleanField(db_column='AVAILABLE', default=True)  # Field name made lowercase.
-    image = models.ImageField(db_column='IMAGE', upload_to=get_bus_file, max_length=100, null=True)
+    id = models.AutoField(primary_key=True)  # Field name made lowercase.
+    number = models.CharField(max_length=15, default='0')  # Field name made lowercase.
+    ac = models.BooleanField(default=False)  # Field name made lowercase.
+    seater = models.BooleanField(default=True)  # Field name made lowercase.
+    total_seats = models.IntegerField(default='56')  # Field name made lowercase.
+    available = models.BooleanField(default=True)  # Field name made lowercase.
+    image = models.ImageField(upload_to=get_bus_file, max_length=100, null=True)
     def __str__(self):
         return self.number
 
     class Meta:
         managed = True
-        db_table = 'Bus'
 
 
 @python_2_unicode_compatible
 class Employee(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='NAME', max_length=100, default='')  # Field name made lowercase.
-    shift = models.CharField(db_column='SHIFT', max_length=10, default='Morning')  # Field name made lowercase.
-    post = models.CharField(db_column='POST', max_length=10, default='Driver')  # Field name made lowercase.
-    account = models.CharField(db_column='ACCOUNT', max_length=16, default='0')  # Field name made lowercase.
-    contact = models.CharField(db_column='CONTACT', max_length=16, default='')
-    address = models.CharField(db_column='ADDRESS', max_length=100, default= '')
-    image = models.ImageField(db_column='IMAGE', upload_to=get_employee_file, max_length='100', null=True)
+    id = models.AutoField( primary_key=True)  # Field name made lowercase.
+    name = models.CharField( max_length=100, default='')  # Field name made lowercase.
+    shift = models.CharField( max_length=10, default='Morning')  # Field name made lowercase.
+    post = models.CharField( max_length=10, default='Driver')  # Field name made lowercase.
+    account = models.CharField( max_length=16, default='0')  # Field name made lowercase.
+    contact = models.CharField( max_length=16, default='')
+    address = models.CharField( max_length=100, default= '')
+    image = models.ImageField( upload_to=get_employee_file, max_length='100', null=True)
     def __str__(self):
         return self.name+" ("+self.post+"-"+self.shift+")"
 
     class Meta:
         managed = True
-        db_table = 'Employee'
-
-
-@python_2_unicode_compatible
-class Route(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    source = models.ForeignKey('Stop', models.DO_NOTHING, db_column='SOURCE', related_name='+')  # Field name made lowercase.
-    dest = models.ForeignKey('Stop', models.DO_NOTHING, db_column='DEST', related_name='+')  # Field name made lowercase.
-    driver = models.ForeignKey(Employee, models.DO_NOTHING, db_column='DRIVER', limit_choices_to=get_drivers, related_name='+')  # Field name made lowercase.
-    conductor = models.ForeignKey(Employee, models.DO_NOTHING, db_column='CONDUCTOR', limit_choices_to=get_conductors, related_name='+')  # Field name made lowercase.
-    bus = models.ForeignKey(Bus, models.DO_NOTHING, db_column='BUS', related_name='+')  # Field name made lowercase.
-    start_time = models.DateTimeField(db_column='START_TIME')  # Field name made lowercase.
-    seats_avail = models.IntegerField(db_column='SEATS_AVAIL', default='56')  # Field name made lowercase.
-    seats_config = models.CharField(db_column='SEATS_CONFIG', max_length=56, default=def_bus_config)
-    journey_time = models.DateTimeField(db_column='JOURNEY_TIME')
-    fair = models.IntegerField(db_column='FAIR', default='0')
-    def __str__(self):
-        return str(self.source.name)+"("+str(self.source.city)+")"+"-"+str(self.dest.name)+"("+str(self.dest.city)+")"
-
-
-    class Meta:
-        managed = True
-        db_table = 'Route'
-
+        
 
 @python_2_unicode_compatible
 class Stop(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='NAME', max_length=100, default='')  # Field name made lowercase.
-    city = models.CharField(db_column='CITY', max_length=100, default='')  # Field name made lowercase.
-    state = models.CharField(db_column='STATE', max_length=100, default='')
-    pincode = models.CharField(db_column='PINCODE', max_length=16, default='')
+    id = models.AutoField( primary_key=True)  # Field name made lowercase.
+    name = models.CharField( max_length=100, default='')  # Field name made lowercase.
+    city = models.CharField( max_length=100, default='')  # Field name made lowercase.
+    state = models.CharField( max_length=100, default='')
+    pincode = models.CharField( max_length=16, default='')
     def __str__(self):
         return self.name+"-"+self.city
 
@@ -96,26 +72,43 @@ class Stop(models.Model):
         return self.name+" "+self.city+" "+self.state+" "+self.pincode
     class Meta:
         managed = True
-        db_table = 'Stop'
+
+@python_2_unicode_compatible
+class Route(models.Model):
+    id = models.AutoField( primary_key=True)  # Field name made lowercase.
+    source = models.ForeignKey(Stop, models.DO_NOTHING,  related_name='+')  # Field name made lowercase.
+    dest = models.ForeignKey(Stop, models.DO_NOTHING,  related_name='+')  # Field name made lowercase.
+    driver = models.ForeignKey(Employee, models.DO_NOTHING,  limit_choices_to=get_drivers, related_name='+')  # Field name made lowercase.
+    conductor = models.ForeignKey(Employee, models.DO_NOTHING,  limit_choices_to=get_conductors, related_name='+')  # Field name made lowercase.
+    bus = models.ForeignKey(Bus, models.DO_NOTHING,  related_name='+')  # Field name made lowercase.
+    start_time = models.DateTimeField()  # Field name made lowercase.
+    seats_avail = models.IntegerField(default='56')  # Field name made lowercase.
+    seats_config = models.CharField(max_length=56, default=def_bus_config)
+    journey_time = models.DateTimeField()
+    fair = models.IntegerField( default='0')
+    def __str__(self):
+        return str(self.source.name)+"("+str(self.source.city)+")"+"-"+str(self.dest.name)+"("+str(self.dest.city)+")"
 
 
+    class Meta:
+        managed = True 
 
 
 
 @python_2_unicode_compatible
 class Ticket(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    user = models.ForeignKey(User, models.DO_NOTHING, db_column='USER', related_name='+')  # Field name made lowercase.
-    route = models.ForeignKey(Route, models.DO_NOTHING, db_column='ROUTE', related_name='+')  # Field name made lowercase.
-    seats = models.IntegerField(db_column='SEATS', default='0')  # Field name made lowercase.
-    price = models.IntegerField(db_column='PRICE', default='0')  # Field name made lowercase.
-    book_time = models.DateTimeField(db_column='BOOK_TIME')  # Field name made lowercase.
-    seats_config = models.CharField(db_column='SEATS_CONFIG', max_length=56, default=def_ticket)
+    id = models.AutoField( primary_key=True)  # Field name made lowercase.
+    user = models.ForeignKey(User, models.DO_NOTHING,  related_name='+')  # Field name made lowercase.
+    route = models.ForeignKey(Route, models.DO_NOTHING,  related_name='+')  # Field name made lowercase.
+    seats = models.IntegerField( default='0')  # Field name made lowercase.
+    price = models.IntegerField( default='0')  # Field name made lowercase.
+    book_time = models.DateTimeField()  # Field name made lowercase.
+    seats_config = models.CharField(max_length=56, default=def_ticket)
     def __str__(self):
         return self.user.name
 
     class Meta:
         managed = True
-        db_table = 'Ticket'
+        
 
 # Create your models here.

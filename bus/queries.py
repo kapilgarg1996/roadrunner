@@ -1,29 +1,29 @@
 ROUTE_SEARCH_QUERY = """
-    select Route.* from Route   
- inner join Stop on Route.SOURCE=Stop.ID and Stop.NAME = %s 
- inner join Stop Stop_Dest on  Route.DEST = Stop_Dest.ID and Stop_Dest.NAME = %s 
- inner join Bus on Route.BUS = Bus.ID
- where timediff(Route.START_TIME, %s)>='01:00:00' 
- and abs(timediff(%s, Route.START_TIME))<240000 
- order by abs(timediff(%s, Route.START_TIME)), Bus.AC, Bus.SEATER;
+    select bus_route.* from bus_route   
+ inner join bus_stop on bus_route.source_id=bus_stop.id and bus_stop.name = %s 
+ inner join bus_stop bus_stop_dest on  bus_route.dest_id = bus_stop_dest.id and bus_stop_dest.name = %s 
+ inner join bus_bus on bus_route.bus_id = bus_bus.id
+ where timediff(bus_route.start_time, %s)>='01:00:00' 
+ and abs(timediff(%s, bus_route.start_time))<240000 
+ order by abs(timediff(%s, bus_route.start_time)), bus_bus.ac, bus_bus.seater;
     """
 
 
 ROUTE_DETAIL_QUERY = """
-select Route.ID as id, Route.START_TIME as start_time, Route.JOURNEY_TIME as journey_time, Route.FAIR as fair, Route.SEATS_AVAIL as seats_avail, Route.SEATS_CONFIG as seats_config, 
- Bus.NUMBER as bus_number, Bus.IMAGE as image, 
- Stop.NAME as s_name, Stop.CITY as s_city, 
- Stop_dest.NAME as d_name, Stop_dest.CITY as d_city, 
- Employee.NAME as driver, DEmployee.NAME as conductor 
- from Route 
- inner join Bus on Route.BUS = Bus.ID 
- inner join Stop on Route.SOURCE = Stop.ID 
- inner join Stop Stop_dest on Route.DEST = Stop_dest.ID 
- inner join Employee on Route.DRIVER = Employee.ID 
- inner join Employee DEmployee on Route.CONDUCTOR = DEmployee.ID 
- where Route.ID = %s
+select bus_route.id as id, bus_route.start_time as start_time, bus_route.journey_time as journey_time, bus_route.fair as fair, bus_route.seats_avail as seats_avail, bus_route.seats_config as seats_config, 
+ bus_bus.number as bus_number, bus_bus.image as image, 
+ bus_stop.name as s_name, bus_stop.city as s_city, 
+ bus_stop_dest.name as d_name, bus_stop_dest.city as d_city, 
+ bus_employee.name , demployee.name
+ from bus_route 
+ inner join bus_bus on bus_route.bus_id = bus_bus.id 
+ inner join bus_stop on bus_route.source_id = bus_stop.id 
+ inner join bus_stop bus_stop_dest on bus_route.dest_id = bus_stop_dest.id 
+ inner join bus_employee on bus_route.driver_id = bus_employee.id 
+ inner join bus_employee demployee on bus_route.conductor_id = demployee.id 
+ where bus_route.id = %s
  """
 
 USER_DETAIL_QUERY = """
-select User.ID as id, User.NAME as name, User.EMAIL as email, Ticket.ID as tid, Route.SOURCE as source, Route.DEST as destination from Ticket inner join User on Ticket.USER = User.ID and User.ID = %s inner join Route on Ticket.ROUTE = Route.ID ;
+select User.id as id, User.name as name, User.email as email, bus_ticket.id as tid, bus_route.source as source, bus_route.dest as destination from bus_ticket.inner join User on bus_ticket.user = User.id and User.id = %s inner join bus_route on bus_ticket.route = bus_route.id ;
 """
