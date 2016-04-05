@@ -23,27 +23,6 @@ def change_password(request):
     form = forms.Password()
     return render(request, 'runner/pass.html', {'form':form})
 
-def send_email(user, pwd, recipient, subject, body):
-    import smtplib
-
-    gmail_user = user
-    gmail_pwd = pwd
-    FROM = user
-    TO = recipient if type(recipient) is list else [recipient]
-    SUBJECT = subject
-    TEXT = body
-
-    # Prepare actual message
-    message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.ehlo()
-    server.starttls()
-    server.login(gmail_user, gmail_pwd)
-    server.sendmail(FROM, TO, message)
-    server.close()
-
-
 
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
@@ -52,14 +31,6 @@ def dictfetchall(cursor):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
-
-def lower_keys(x):
-    if isinstance(x, list):
-       return [lower_keys(v) for v in x]
-    elif isinstance(x, dict):
-       return dict((k.lower(), lower_keys(v)) for k, v in x.iteritems())
-    else:
-       return x
 
 
 def index(request):
@@ -79,9 +50,7 @@ def send_stops(request):
         result[x] = row
     db.close()
     return HttpResponse(json.dumps(result))
-# Create your views here.
-def route_sel(request):
-    pass
+
 
 def login_form(request):
     if request.method == 'POST':
@@ -136,6 +105,15 @@ def get_user_detail(request, id):
     return Response(result.data)
 
 
+@api_view(['GET'])
+def get_user(request, id):
+    uid = id
+    try:
+        user = User.objects.get(id=uid)
+        serial_user = UserSerializer(user)
+        return Response(serial_user.data)
+    except:
+        return Response("NO_DATA", status=404)
 
 def user_saver(request, userdata):
     user = User(**userdata)

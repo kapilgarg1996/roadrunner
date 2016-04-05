@@ -25,5 +25,5 @@ select Route.ID as id, Route.START_TIME as start_time, Route.JOURNEY_TIME as jou
  """
 
 USER_DETAIL_QUERY = """
-select User.ID as id, User.NAME as name, User.EMAIL as email, Ticket.ID as tid, Route.SOURCE as source, Route.DEST as destination from Ticket inner join User on Ticket.USER = User.ID and User.ID = %s inner join Route on Ticket.ROUTE = Route.ID ;
+select User.ID as id, User.NAME as name, User.EMAIL as email, bus_ticket.id as tid, bus_route.source_id as source, bus_route.dest_id as destination from bus_ticket inner join User on bus_ticket.user_id = User.ID and User.ID = %s inner join bus_route on bus_ticket.route_id = bus_route.id ;
 """
