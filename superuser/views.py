@@ -259,10 +259,20 @@ def confirm_signup(request):
                 user = UserTemp.objects.get(validation_key = valid_key)
                 user.verified = True
                 user.save()
+                valid_key.delete()
                 data_handler(request, user.to_dict())
+
+                url = "http://roadrunner.com/e-auth/generate_token/"
+                mdict = user.to_dict()
+                udata = urllib.urlencode(mdict)
+                req = urllib2.Request(url, udata)
+                res = urllib2.urlopen(req)
+                content = res.read()
+                resdict = json.loads(content)
+
                 data['status'] = 200
                 data['detail'] = 'Permanent Account Registered'
-                data['account'] = 'VERIFIED'
+                data['account'] = resdict['token']
                 sdata = SignSerializer(data)
                 response.data = sdata.data
                 response.status_code = 200
