@@ -4,6 +4,10 @@ from django.db.models import Q
 from django.db import models, transaction
 from django.db.utils import OperationalError
 from runner.models import User
+import urllib, urllib2
+from datetime import datetime, timedelta
+from django.utils import timezone
+import json
 
 def_bus_config = '1'
 def_bus_config *= 56
@@ -35,6 +39,7 @@ class Bus(models.Model):
     ac = models.BooleanField(default=False)  # Field name made lowercase.
     seater = models.BooleanField(default=True)  # Field name made lowercase.
     total_seats = models.IntegerField(default='56')  # Field name made lowercase.
+    fair_ratio = models.IntegerField(default=5)
     available = models.BooleanField(default=True)  # Field name made lowercase.
     image = models.ImageField(upload_to=get_bus_file, max_length=100, null=True)
     def __str__(self):
@@ -87,11 +92,16 @@ class Route(models.Model):
     start_time = models.DateTimeField()  # Field name made lowercase.
     seats_avail = models.IntegerField(default='56')  # Field name made lowercase.
     seats_config = models.CharField(max_length=56, default=def_bus_config)
-    journey_time = models.DateTimeField()
-    fair = models.IntegerField( default='0')
+    journey_time = models.DateTimeField(null=True, blank=True)
+    fair = models.IntegerField( null=True, default='0')
     def __str__(self):
         return str(self.source.name)+"("+str(self.source.city)+")"+"-"+str(self.dest.name)+"("+str(self.dest.city)+")"
 
+    def save(self, *args, **kwargs):
+        datadict = gmaps(source=self.source.get_location(), dest=self.dest.get_location())
+        self.fair = self.bus.fair_ratio*datadict['distance']/1000
+        self.journey_time = self.start_time + timedelta(seconds=datadict['time'])
+        super(Route, self).save(*args, **kwargs)
 
     class Meta:
         managed = True 

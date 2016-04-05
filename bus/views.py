@@ -59,7 +59,7 @@ def book_ticket(request):
         book_time = timezone.now()
         price = route.fair*int(seats)
         status = check_seats(int(rid), seats_config )
-        if status=True:
+        if status==True:
             ticket = Ticket(user=user, route=route, seats=int(seats), price=price, book_time = book_time, seats_config=seats_config, payment_status=payment)
             ticket.save()
             serial_ticket = TicketSerializer(ticket)
