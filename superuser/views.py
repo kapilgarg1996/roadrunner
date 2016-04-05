@@ -369,15 +369,28 @@ def confirm_password(request):
 
             pass_req = PassRequest.objects.get(validation_key=valid_key)    
             user = pass_req.user
-            if pass_req.request_verified==True and pass_req.pending==True:
+            nowtime = timezone.now()
+            if pass_req.request_verified==True and pass_req.pending==True and nowtime<valid_key.expire_time:
                 pass_req.pending = False
                 pass_req.save()
+                old_pass = getattr(user, settings.SUPERUSER_PASSFIELD)
                 setattr(user, settings.SUPERUSER_PASSFIELD, npass)
                 user.save()
+                valid_key.delete()
+
+                url = "http://roadrunner.com/e-auth/generate_token/"
+                mdict = user.to_dict()
+                mdict[settings.SUPERUSER_PASSFIELD] = old_pass
+                udata = urllib.urlencode(mdict)
+                req = urllib2.Request(url, udata)
+                res = urllib2.urlopen(req)
+                content = res.read()
+                resdict = json.loads(content)
+
                 pass_handler(uid=getattr(user, settings.SUPERUSER_PRIMARY), password=npass)
                 data['status'] = 200
                 data['detail'] = 'Password Changed'
-                data['request'] = 'PASSWORD_CHANGED'
+                data['request'] = resdict['token']
                 sdata = PassRequestSerializer(data)
                 response.data = sdata.data
                 response.status_code = 200

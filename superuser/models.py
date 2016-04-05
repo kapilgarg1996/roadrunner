@@ -47,7 +47,7 @@ class UserTemp(User):
 @python_2_unicode_compatible
 class PassRequest(models.Model):
     user = models.ForeignKey(UserTemp, models.DO_NOTHING, default='', related_name='+')
-    validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
+    validation_key = models.ForeignKey(Validation, models.SET_NULL, related_name='+', null=True, blank=True)  # Field name made lowercase.
     pending = models.BooleanField(default=True)
     request_verified = models.BooleanField(default=False)
     
