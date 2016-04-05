@@ -11,7 +11,8 @@ User = getattr(UserApp, setlist[-1])
 
 @python_2_unicode_compatible
 class Authorize(models.Model):
-    user = models.ForeignKey(User, models.DO_NOTHING, related_name='+', default=0)
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, models.CASCADE, related_name='+', default='')
     auth_token = models.CharField(max_length=200, default='')
     create_time = models.DateTimeField()
     expire_time = models.DateTimeField()

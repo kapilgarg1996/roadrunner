@@ -27,7 +27,7 @@ class Validation(models.Model):
 @python_2_unicode_compatible
 class UserTemp(User):    
 
-    validation_key = models.ForeignKey(Validation, models.DO_NOTHING, related_name='+', default='')  # Field name made lowercase.
+    validation_key = models.ForeignKey(Validation, models.SET_NULL, related_name='+', null=True, blank=True)  # Field name made lowercase.
     verified = models.BooleanField(default=False)
     def __str__(self):
         primary = settings.SUPERUSER_PRIMARY
