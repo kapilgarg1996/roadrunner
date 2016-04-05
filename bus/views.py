@@ -17,9 +17,6 @@ from django.utils import timezone
 
 # Create your views here.
 
-def route_form(request):
-    form = forms.RouteForm()
-    return render(request, 'bus/routeform.html', {'form':form})
 
 @api_view(['GET'],)
 def get_stops(request):
@@ -47,3 +44,41 @@ def get_route_detail(request, id):
     result = RouteDetailSerializer(queryset, many=True)
     return Response(result.data)
 
+
+
+@api_view(['POST'])
+def book_ticket(request):
+    #try:
+        uid = request.POST['user']
+        rid = request.POST['route']
+        payment = request.POST['payment_status']
+        seats = request.POST['seats']
+        seats_config = request.POST['seats_config']
+        user = User.objects.get(id=uid)
+        route = Route.objects.get(id=rid)
+        book_time = timezone.now()
+        price = route.fair*int(seats)
+        status = check_seats(int(rid), seats_config )
+        if status=True:
+            ticket = Ticket(user=user, route=route, seats=int(seats), price=price, book_time = book_time, seats_config=seats_config, payment_status=payment)
+            ticket.save()
+            serial_ticket = TicketSerializer(ticket)
+            return Response(serial_ticket.data)
+        else:
+            data = {}
+            data['detail'] = "Seats have been occupied. Choose other seat"
+            response = Response()
+            response.data = data
+            return response
+    #except:
+    #    response = Response(status=405)
+    #    response.data = "Problem Encountered"
+    #    return response
+
+def check_seats(rid, seats_config):
+    route = Route.objects.get(id=rid)
+    for i in range(0, len(route.seats_config)):
+        if seats_config[i]=='0' and route.seats_config[i]=='0':
+            return False
+
+    return True

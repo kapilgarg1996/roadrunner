@@ -8,8 +8,11 @@ from runner.models import User
 def_bus_config = '1'
 def_bus_config *= 56
 def_ticket = '0'*56
-DRIVER = ()
-CONDUCTOR = ()
+
+PAYMENT_STATUS = (
+        ('DONE', 'Done'),
+        ('PENDING', 'Pending'),
+        )
 
 def get_drivers():
     return Q(post='Driver')
@@ -104,6 +107,7 @@ class Ticket(models.Model):
     price = models.IntegerField( default='0')  # Field name made lowercase.
     book_time = models.DateTimeField()  # Field name made lowercase.
     seats_config = models.CharField(max_length=56, default=def_ticket)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS)
     def __str__(self):
         return self.user.name
 
@@ -111,4 +115,20 @@ class Ticket(models.Model):
         managed = True
         
 
-# Create your models here.
+def gmaps(source='', dest=''):
+    source = urllib.quote(source)
+    dest = urllib.quote(dest)
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+source+"&destinations="+dest+"&mode=driving&key=AIzaSyBg5U_b0snbOc3pWAadlcvYtRIEp9RpjK0"
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    data = response.read()
+
+    datadict = json.loads(data)
+    eldict = datadict['rows'][0]['elements'][0]
+    distance = eldict['distance']['value']
+    time = eldict['duration']['value']
+
+    retdict = {}
+    retdict['distance'] = distance
+    retdict['time'] = time
+    return retdict

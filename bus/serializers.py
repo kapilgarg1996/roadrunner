@@ -8,6 +8,10 @@ class RouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
 
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+
 class RouteDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     start_time = serializers.DateTimeField()

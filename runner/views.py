@@ -15,6 +15,9 @@ from django.core.mail import send_mail
 from runner.models import *
 
 #from django.core.mail import send_mail
+def route_form(request):
+    form = forms.RouteForm()
+    return render(request, 'runner/routeform.html', {'form':form})
 
 def change_password(request):
     form = forms.Password()
