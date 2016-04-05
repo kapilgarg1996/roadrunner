@@ -16,6 +16,7 @@ import hashlib
 from django.conf import settings
 import importlib
 from django.utils import timezone
+import urllib, urllib2, json
 
 setlist = settings.SUPERUSER_HANDLER.split('.')
 modules = importlib.import_module('.'.join(setlist[:-1]))
@@ -188,9 +189,18 @@ def login(request):
             args['verified'] = True
             try:
                 user = UserTemp.objects.get(**args)
+
+                url = "http://roadrunner.com/e-auth/generate_token/"
+                mdict = user.to_dict()
+                udata = urllib.urlencode(mdict)
+                req = urllib2.Request(url, udata)
+                res = urllib2.urlopen(req)
+                content = res.read()
+                resdict = json.loads(content)
+
                 data['status'] = 200
                 data['detail'] = 'Logged In'
-                data['account'] = 'LOGGED_IN'
+                data['account'] = resdict['token']
                 sdata = SignSerializer(data)
                 response.data = sdata.data
                 response.status_code = 200
