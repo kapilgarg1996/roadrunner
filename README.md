@@ -39,19 +39,12 @@ Follow the steps as they are and you'll be good to use roadrunner
 
 4. switch to the _virtual environment_ by typing `source venv/bin/activate` inside your project directory 
 
-5. install `django` by `pip install Django` (6.6 MB)
+5. install the dependencies by running `pip install -r requirements.txt`
 
-6. install `rest_framework` by `pip install djangorestframework` (few KB)
-
-7. install `mysqldb` by `pip install mysql-python` (if you are using python>2.7 then install mysqlclient by `pip install mysqlclient`) (few KB)
-
-8. install `Pillow` by `pip install Pillow` (10 MB)
-
-9. install mysql
+6. install mysql
   1. `sudo apt-get update`
   2. `sudo apt-get install mysql-server-5.5`
   
-10. to exit the _virtual environment_ type `deactivate`
 
 ### Steps for setup
 
@@ -70,5 +63,7 @@ Follow the steps as they are and you'll be good to use roadrunner
 1. Run the Django's development server using `python manage.py runserver`
 
 2. Open `localhost/admin/` in your browser
+
+3. To exit the _virtual environment_ type `deactivate`
 
 *If you encounter any error during the installation, setup or running the server then please inform about it. If you find some error which is easy to fix then also inform about it so that we can fix it in main code or in the above steps.*
