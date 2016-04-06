@@ -35,17 +35,23 @@ Follow the steps as they are and you'll be good to use roadrunner
 
 2. install `virtualenv` by typing `sudo pip install --upgrade virtualenv`
 
-3. install `django` by `pip install Django` (6.6 MB)
+3. create a _virtual environment_ by typing `virtualenv venv` inside your project directory
 
-4. install `rest_framework` by `pip install djangorestframework` (few KB)
+4. switch to the _virtual environment_ by typing `source venv/bin/activate` inside your project directory 
 
-5. install `mysqldb` by `pip install mysql-python` (if you are using python>2.7 then install mysqlclient by `pip install mysqlclient`) (few KB)
+5. install `django` by `pip install Django` (6.6 MB)
 
-6. install `Pillow` by `pip install Pillow` (10 MB)
+6. install `rest_framework` by `pip install djangorestframework` (few KB)
 
-7. install mysql
+7. install `mysqldb` by `pip install mysql-python` (if you are using python>2.7 then install mysqlclient by `pip install mysqlclient`) (few KB)
+
+8. install `Pillow` by `pip install Pillow` (10 MB)
+
+9. install mysql
   1. `sudo apt-get update`
   2. `sudo apt-get install mysql-server-5.5`
+  
+10. to exit the _virtual environment_ type `deactivate`
 
 ### Steps for setup
 
