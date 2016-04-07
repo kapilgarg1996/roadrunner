@@ -67,7 +67,7 @@ def authorize(request):
             if(timezone.now() < auth.expire_time):
                 data = {'status':200, 'authorized':True}
             else:
-                data['authorized'] = False
+                data = {'status':200, 'authorized':False}
 
             sdata = AuthSerializer(data)
             response.data = sdata.data

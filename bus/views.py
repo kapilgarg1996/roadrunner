@@ -30,6 +30,7 @@ def get_routes(request):
     source = request.POST['source']
     dest = request.POST['dest']
     time = request.POST['time']
+
     now = str(timezone.now())
     sql = ROUTE_SEARCH_QUERY
     queryset = Route.objects.raw(sql, (source, dest, now, time, time) )
