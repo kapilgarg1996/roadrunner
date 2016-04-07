@@ -25,7 +25,7 @@ Django powered project which acts as Bus and Taxi booking portal for Travel Firm
 
 If you want to contribute to roadrunner by improving the feautures or by testing its features then you'll have to set it up on your machine. Though you can run it globally but i would prefer you do all the development inside `virtualenv` so that it doesn't pollute your global packages.
 
-Follow the steps as they are and you'll be good to use roadrunner
+Follow the steps as they are and you'll be good to use roadrunner.
 
 ### Installations
 
@@ -35,28 +35,26 @@ Follow the steps as they are and you'll be good to use roadrunner
 
 2. install `virtualenv` by typing `sudo pip install --upgrade virtualenv`
 
-3. create a _virtual environment_ by typing `virtualenv venv` inside your project directory
+3. Clone roadrunner from your forked directory.
 
-4. switch to the _virtual environment_ by typing `source venv/bin/activate` inside your project directory 
+4. create a _virtual environment_ by typing `virtualenv venv` inside your project directory
 
-5. install the dependencies by running `pip install -r requirements.txt`
+5. switch to the _virtual environment_ by typing `source venv/bin/activate` inside your project directory 
 
-6. install mysql
+6. install the dependencies by running `pip install -r requirements.txt`
+
+7. install mysql
   1. `sudo apt-get update`
   2. `sudo apt-get install mysql-server-5.5`
   
 
-### Steps for setup
+### Setup database
 
-1. Clone roadrunner
+1. Create database tables by running `python manage.py makemigrations` and then `python manage.py migrate`
 
-2. Go to directory where you cloned roadrunner and create a virtual environment by typing `virtualenv roadrunner`
+2. collect admin static files by running `python manage.py collectstatic`
 
-3. Go to roadrunner and activate the environment by typing `source bin/activate`
-
-4. Create database tables by running `python manage.py makemigrations` and then `python manage.py migrate`
-
-5. collect admin static files by running `python manage.py collectstatic`
+3. create superuser for your project by running the command `python manage.py createsuperuser` (_as i know, your username and password must be same for django admin interface and for mysql_)
 
 ### Testing the URL's
 
