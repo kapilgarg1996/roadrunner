@@ -190,7 +190,7 @@ def login(request):
             try:
                 user = UserTemp.objects.get(**args)
 
-                url = "http://roadrunner.com/e-auth/generate_token/"
+                url = request.build_absolute_uri("/e-auth/generate_token/")
                 mdict = user.to_dict()
                 udata = urllib.urlencode(mdict)
                 req = urllib2.Request(url, udata)
@@ -262,7 +262,7 @@ def confirm_signup(request):
                 valid_key.delete()
                 data_handler(request, user.to_dict())
 
-                url = "http://roadrunner.com/e-auth/generate_token/"
+                url = request.build_absolute_uri("/e-auth/generate_token/")
                 mdict = user.to_dict()
                 udata = urllib.urlencode(mdict)
                 req = urllib2.Request(url, udata)
@@ -378,7 +378,7 @@ def confirm_password(request):
                 user.save()
                 valid_key.delete()
 
-                url = "http://roadrunner.com/e-auth/generate_token/"
+                url = request.build_absolute_uri("/e-auth/generate_token/")
                 mdict = user.to_dict()
                 mdict[settings.SUPERUSER_PASSFIELD] = old_pass
                 udata = urllib.urlencode(mdict)
