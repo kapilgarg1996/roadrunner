@@ -23,6 +23,7 @@ class RouteForm(forms.Form):
     source = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
     dest = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
     time = forms.DateTimeField()
+    token = forms.CharField(label='token', max_length=200)
 
 class UserSignupForm(ModelForm):
     class Meta:
@@ -45,10 +46,4 @@ class BookingForm(ModelForm):
     class Meta:
         model = Booking
         fields = ('user', 'taxi', 'payment_status', 'journey_time', 'source', 'dest')
-
-
-class RouteForm(forms.Form):
-    source = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
-    dest = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
-    time = forms.DateTimeField()
 
