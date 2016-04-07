@@ -20,10 +20,10 @@ from rest_framework import routers
 import account
 
 urlpatterns = [
-    url(r'^bus/', include('bus.urls')),
-    url(r'^taxi/', include('taxi.urls')),
-    url(r'^superuser/', include('superuser.urls')),
-    url(r'^e-auth/', include('e_auth.urls')),
-    url(r'^runner/', include('runner.urls')),
+    url(r'^bus/', include('bus.urls', namespace='bus', app_name='bus')),
+    url(r'^taxi/', include('taxi.urls', namespace='taxi', app_name='taxi')),
+    url(r'^superuser/', include('superuser.urls', namespace='superuser', app_name='superuser')),
+    url(r'^e-auth/', include('e_auth.urls', namespace='e_auth', app_name='e_auth')),
+    url(r'^runner/', include('runner.urls', namespace='e_auth', app_name='runner')),
     url(r'^admin/', admin.site.urls),
 ]

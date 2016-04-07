@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
 EAUTH_USER = 'runner.models.User'
 EAUTH_FIELDS = ['name', 'password']
+EAUTH_ALLOWEDAPPS = ['admin', 'superuser', 'runner', 'e_auth']
 
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
@@ -42,6 +43,13 @@ SUPERUSER_PRFORM = 'runner.forms.Password'
 SUPERUSER_PASSFIELD = 'password'
 SUPERUSER_PHANDLER = 'runner.views.pass_handler'
 SUPERUSER_FORMTEMPLATE = 'runner/password.html'
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+}
 
 INSTALLED_APPS = [
     'e_auth.apps.EAuthConfig',
@@ -67,6 +75,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'e_auth.middleware.AuthorizeMiddleware',
 ]
 
 ROOT_URLCONF = 'roadrunner.urls'
