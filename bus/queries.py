@@ -11,7 +11,7 @@ ROUTE_SEARCH_QUERY = """
 
 ROUTE_DETAIL_QUERY = """
 select bus_route.id as id, bus_route.start_time as start_time, bus_route.journey_time as journey_time, bus_route.fair as fair, bus_route.seats_avail as seats_avail, bus_route.seats_config as seats_config, 
- bus_bus.number as bus_number, bus_bus.image as image, 
+ bus_bus.number as bus_number, bus_bus.image as image, bus_bus.ac as ac, bus_bus.seater as seater, 
  bus_stop.name as s_name, bus_stop.city as s_city, 
  bus_stop_dest.name as d_name, bus_stop_dest.city as d_city, 
  bus_employee.name , demployee.name

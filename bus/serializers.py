@@ -21,6 +21,8 @@ class RouteDetailSerializer(serializers.Serializer):
     seats_config = serializers.CharField()
     bus_number = serializers.CharField()
     image = serializers.CharField()
+    ac = serializers.BoolField()
+    seater = serializers.BoolField()
     s_name = serializers.CharField()
     s_city = serializers.CharField()
     d_name = serializers.CharField()

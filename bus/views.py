@@ -18,7 +18,7 @@ from django.utils import timezone
 # Create your views here.
 
 
-@api_view(['GET'],)
+@api_view(['GET', 'POST'],)
 def get_stops(request):
     sql = """select * from bus_stop where bus_stop.id != -1"""
     queryset = Stop.objects.raw(sql)
@@ -37,7 +37,7 @@ def get_routes(request):
     result = RouteSerializer(queryset, many=True)
     return Response(result.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def get_route_detail(request, id):
     rid = id
     sql = ROUTE_DETAIL_QUERY
