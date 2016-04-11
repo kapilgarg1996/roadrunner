@@ -19,6 +19,9 @@ class Password(forms.Form):
     name = forms.CharField(label='Your name', max_length=100)
     email = forms.EmailField(label='Your mail', max_length=100)
 
+
+class StopsForm(forms.Form):
+    token = forms.CharField(label="token", max_length=200 )
 class RouteForm(forms.Form):
     source = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
     dest = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")

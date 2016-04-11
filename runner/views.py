@@ -19,6 +19,9 @@ def route_form(request):
     form = forms.RouteForm()
     return render(request, 'runner/routeform.html', {'form':form})
 
+def stops_form(request):
+    form = forms.StopsForm()
+    return render(request, 'runner/stops.html', {'form':form})
 def change_password(request):
     form = forms.Password()
     return render(request, 'runner/pass.html', {'form':form})

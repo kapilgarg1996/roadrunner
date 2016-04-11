@@ -4,6 +4,7 @@ from . import views
 import superuser
 urlpatterns = [                  
         url(r'^route-search/', views.route_form, name='route_form'),
+        url(r'^stops-form/', views.stops_form),
         url(r'^generate-form/', views.generate_form, name='test'),
         url(r'authorize-form/', views.authorize_form, name='test2'),
         url(r'^password-new/', views.enter_pass, name='new_pass'),
