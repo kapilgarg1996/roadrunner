@@ -15,16 +15,6 @@ from django.core.mail import send_mail
 from runner.models import *
 
 #from django.core.mail import send_mail
-def route_form(request):
-    form = forms.RouteForm()
-    return render(request, 'runner/routeform.html', {'form':form})
-
-def stops_form(request):
-    form = forms.StopsForm()
-    return render(request, 'runner/stops.html', {'form':form})
-def change_password(request):
-    form = forms.Password()
-    return render(request, 'runner/pass.html', {'form':form})
 
 
 def dictfetchall(cursor):
@@ -139,23 +129,37 @@ def pass_handler(uid='', password=''):
     user.password = password
     user.save()
 
+# Forms for testing Roadrunner API
+
+def route_form(request):
+    form = forms.RouteForm()
+    return render(request, 'runner/common.html', {'form':form, 'url':'/bus/routes/', 'button':'Search Route'})
+
+def stops_form(request):
+    form = forms.StopsForm()
+    return render(request, 'runner/common.html', {'form':form, 'url':'/bus/stops/', 'button':'Get Stops'})
+
+def change_password(request):
+    form = forms.Password()
+    return render(request, 'runner/common.html', {'form':form, 'url':'/superuser/password-reset/', 'button':'Generate Password Request'})
+
 def taxi_form(request):
     form = forms.BookingForm()
-    return render(request, 'runner/taxi.html', {'form':form})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/taxi/book-taxi/', 'button':'Book Taxi'})
 
 def bus_form(request):
     form = forms.BusBookForm()
-    return render(request, 'runner/bus.html', {'form':form})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/bus/book-ticket/', 'button':'Book Bus Ticket'})
 
 def generate_form(request):
     form = forms.AuthForm()
-    return render(request, 'runner/form.html', {'form':form})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/e-auth/generate_token/', 'button':'Generate Token'})
 
 def authorize_form(request):
     form = forms.TokenForm()
-    return render(request, 'runner/anform.html', {'form':form})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/e-auth/authorize/', 'button':'Authorize Token'})
 
 def enter_pass(request):
     form = forms.PassForm()
-    return render(request, 'runner/passform.html', {'form':form})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/superuser/password-confirm/', 'button':'Change Password'})
 
