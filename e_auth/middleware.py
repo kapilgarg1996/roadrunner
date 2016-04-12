@@ -16,12 +16,19 @@ class AuthorizeMiddleware(object):
             mdict = {'token':token}
             udata = urllib.urlencode(mdict)
             req = urllib2.Request(url, udata)
-            res = urllib2.urlopen(req)
 
             try:
-                status = res.get_code()
-            except:
+                res = urllib2.urlopen(req)
                 status = res.code
+            except:
+                retdict = {}
+                retdict['status'] = 400
+                retdict['data'] = "User Not Authorized"
+                retdict['detail'] = "Not Authenticated"
+                response.status_code = 400
+                serialdata = json.dumps(retdict)
+                response.content = serialdata
+                return response
             if status==200:
                 content = res.read()
                 auth_status = json.loads(content)

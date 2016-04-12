@@ -28,7 +28,7 @@ ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
 EAUTH_USER = 'runner.models.User'
 EAUTH_FIELDS = ['name', 'password']
-EAUTH_ALLOWEDAPPS = ['bus', 'admin', 'superuser', 'runner', 'e_auth']
+EAUTH_ALLOWEDAPPS = ['admin', 'superuser', 'runner', 'e_auth']
 
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
