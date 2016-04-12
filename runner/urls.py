@@ -15,6 +15,8 @@ urlpatterns = [
         url(r'^change-password', views.change_password, name='change_password'),
         url(r'^login-naive/', views.login_form, name='login'),
         url(r'^book-taxi/', views.taxi_form, name='book_taxi'),
+        url(r'^book-bus/', views.bus_form, name='book_bus'),
+        url(r'^user-name/', views.get_user_by_name, name='user_name'),
         url(r'^user-detail/(?P<id>[0-9][0-9]*)', views.get_user, name='user'),
         url(r'get-user/(?P<id>[0-9][0-9]*)', views.get_user_detail, name='user_detail'),
 ]

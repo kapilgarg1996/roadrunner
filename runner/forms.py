@@ -22,12 +22,19 @@ class Password(forms.Form):
 
 class StopsForm(forms.Form):
     token = forms.CharField(label="token", max_length=200 )
+
 class RouteForm(forms.Form):
     source = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
     dest = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="name")
     time = forms.DateTimeField()
     token = forms.CharField(label='token', max_length=200)
 
+class BusBookForm(forms.Form):
+    user = forms.IntegerField()
+    route = forms.IntegerField()
+    payment_status = forms.CharField()
+    seats = forms.IntegerField()
+    seats_config = forms.CharField()
 class UserSignupForm(ModelForm):
     class Meta:
         model = User

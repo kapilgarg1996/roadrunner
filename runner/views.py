@@ -97,7 +97,7 @@ def user_signup(request):
     return render(request, 'runner/signup.html', {'form': form})
 
 
-@api_view(['GET'],)
+@api_view(['GET'])
 def get_user_detail(request, id):
     cursor = connection.cursor()
     uid = id
@@ -107,6 +107,18 @@ def get_user_detail(request, id):
     result = UserDetailSerializer(queryset, many=True)
     return Response(result.data)
 
+@api_view(['POST', 'GET'])
+def get_user_by_name(request):
+    if request.method=="GET":
+        uname = request.GET['username']
+    elif request.method == "POST":
+        uname = request.POST['username']
+    try:
+        user = User.objects.get(name=uname)
+        serial_user = UserSerializer(user)
+        return Response(serial_user.data)
+    except:
+        return Response("NO_DATA", status=404)
 
 @api_view(['GET'])
 def get_user(request, id):
@@ -130,6 +142,10 @@ def pass_handler(uid='', password=''):
 def taxi_form(request):
     form = forms.BookingForm()
     return render(request, 'runner/taxi.html', {'form':form})
+
+def bus_form(request):
+    form = forms.BusBookForm()
+    return render(request, 'runner/bus.html', {'form':form})
 
 def generate_form(request):
     form = forms.AuthForm()

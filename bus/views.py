@@ -59,7 +59,7 @@ def book_ticket(request):
         route = Route.objects.get(id=rid)
         book_time = timezone.now()
         price = route.fair*int(seats)
-        status = check_seats(int(rid), seats_config )
+        status = check_seats(int(rid), int(seats), seats_config )
         if status==True:
             ticket = Ticket(user=user, route=route, seats=int(seats), price=price, book_time = book_time, seats_config=seats_config, payment_status=payment)
             ticket.save()
@@ -76,10 +76,21 @@ def book_ticket(request):
     #    response.data = "Problem Encountered"
     #    return response
 
-def check_seats(rid, seats_config):
+def check_seats(rid, numseats, seats_config):
     route = Route.objects.get(id=rid)
     for i in range(0, len(route.seats_config)):
         if seats_config[i]=='0' and route.seats_config[i]=='0':
             return False
 
+    seats = ''
+    for i in range(0, len(route.seats_config)):
+        if route.seats_config[i]=='1' and seats_config[i]=='0':
+            seats += '0'
+        else:
+            seats += route.seats_config[i]
+    
+    route.seats_avail -= numseats
+    route.seats_config = seats
+    route.save()
+    
     return True
