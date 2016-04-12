@@ -29,62 +29,6 @@ def dictfetchall(cursor):
 def index(request):
     return HttpResponse("Hello kapil")
 
-def send_stops(request):
-    db = mysql.connect("localhost", "root", "kapilgarg", "roadrunner")
-    cursor = db.cursor(SSDictCursor)
-    sql = "select * from Stop"
-    cursor.execute(sql)
-    result = {}
-    for i in range(0, 5):
-        row = cursor.fetchone()
-        ide = row['ID']
-        del row['ID']
-        x = int(ide)
-        result[x] = row
-    db.close()
-    return HttpResponse(json.dumps(result))
-
-
-def login_form(request):
-    if request.method == 'POST':
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            cursor = connection.cursor()
-            sql = """
-            select * from User where NAME = %s and PASSWORD = %s
-            """
-            cursor.execute(sql, (form.cleaned_data['username'], form.cleaned_data['password']))
-            if cursor.rowcount == 1:
-                return HttpResponse("Welcome")
-            else:
-                return HttpResponse("Cant login")
-        else:
-            return HttpResponse("Not a valid account")
-
-    else:
-        form = forms.LoginForm()
-
-    return render(request, 'runner/login.html', {'form':form})
-
-def test(request):
-    return render(request, 'runner/test.html')
-
-def user_signup(request):
-    if request.method=='POST':
-        form = forms.UserSignupForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            #send_email('kapilgarg1996@gmail.com', 'idlztwqtrnquuali', ['kapilgarg1996@gmail.com'], 'Test', 'Test Mail')
-            send_mail('Subject here', 'Here is the message.', 'from@example.com',
-                        ['kapilgarg1996@gmail.com'], fail_silently=False)
-            return HttpResponse("Account Created")
-            #form.save()
-        else:
-            return HttpResponse("Problem Occurred")
-    else:
-        form = forms.UserSignupForm()
-
-    return render(request, 'runner/signup.html', {'form': form})
 
 
 @api_view(['GET'])
@@ -130,6 +74,14 @@ def pass_handler(uid='', password=''):
     user.save()
 
 # Forms for testing Roadrunner API
+
+def login_form(request):
+    form = forms.LoginForm()
+    return render(request, 'runner/common.html', {'form':form, 'url':'/superuser/login/', 'button': 'Log In'})
+
+def user_signup(request):
+    form = forms.UserSignupForm()
+    return render(request, 'runner/common.html', {'form': form, 'url':'/superuser/signup/', 'button':'Sign Up'})
 
 def route_form(request):
     form = forms.RouteForm()
