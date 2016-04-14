@@ -19,6 +19,16 @@ class Password(forms.Form):
     name = forms.CharField(label='Your name', max_length=100)
     email = forms.EmailField(label='Your mail', max_length=100)
 
+class RouteAddForm(forms.Form):
+    stop1 = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="id")
+    stop2 = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="id")
+    stop3 = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="id")
+    stop4 = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="id")
+    stop5 = forms.ModelChoiceField(queryset=Stop.objects.all(), to_field_name="id")
+    time = forms.DateTimeField()
+    bus = forms.ModelChoiceField(queryset=Bus.objects.filter(available=True), to_field_name='id')
+    driver = forms.ModelChoiceField(queryset=Employee.objects.filter(post='DRIVER'), to_field_name='id')
+    conductor = forms.ModelChoiceField(queryset=Employee.objects.filter(post='Conductor'), to_field_name='id')
 
 class StopsForm(forms.Form):
     token = forms.CharField(label="token", max_length=200 )

@@ -115,3 +115,6 @@ def enter_pass(request):
     form = forms.PassForm()
     return render(request, 'runner/common.html', {'form':form, 'url':'/superuser/password-confirm/', 'button':'Change Password'})
 
+def route_add_form(request):
+    form = forms.RouteAddForm()
+    return render(request, 'runner/common.html', {'form': form, 'url': '/bus/add-routes/', 'button':'Add Routes'})
