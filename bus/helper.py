@@ -20,36 +20,55 @@ import threading
 def save(route):
     route.save()
 def route_saver(stops, stime, driver, conductor, bus):
-    times=[]
+    stime = stime - timedelta(minutes=30)
+    times=[stime]
     i=0
     for source in stops:
+        try:
+            stime = times[i] + timedelta(minutes=30)
+        except:
+            pass
         for dest in stops:
             if source != dest and stops.index(source) < stops.index(dest):
                 route = Route(source=source, dest=dest, start_time=stime, bus=bus, driver=driver, conductor=conductor)
 
-                thread = threading.Thread(name='save', target=save, args=[route])
-                thread.start()
-                thread.join(5)
+                #thread = threading.Thread(name='save', target=save, args=[route])
+                #thread.start()
+                #thread.join(5)
+                route.save()
                 if i==0:
                     times.append(route.journey_time)
-        try:        
-            stime = times[i] + timedelta(minutes=30)
-        except:
-            pass
+
         i+= 1
 
+    return route.journey_time
+
 def route_adder(request):
-    stopids = [4, 3, 5, 6]
-    stime = datetime(2016, 4, 20, 6, 0, 0)
-    driver = Employee.objects.get(id=3)
-    conductor = Employee.objects.get(id=4)
-    bus = Bus.objects.get(id=2)
+    stopids = []
+    for key in range(len(request.POST.keys())):
+        try:
+            stopids.append(int(request.POST.get('stop'+str(key))))
+        except:
+            pass
+    stime = datetime.strptime(request.POST['time'], '%Y-%m-%d %H:%M:%S')
+    driver = Employee.objects.get(id=int(request.POST['driver']))
+    conductor = Employee.objects.get(id=int(request.POST['conductor']))
+    bus = Bus.objects.get(id=int(request.POST['bus']))
     stops=[]
     for stopid in stopids:
         stop = Stop.objects.get(id=stopid)
         stops.append(stop)
 
-    route_saver(stops, stime, driver, conductor, bus)
+    last_time = route_saver(stops, stime, driver, conductor, bus)
+    new_stops = []
+    for stop in reversed(stops):
+        new_stops.append(stop)
 
-    return HttpResponse("Done")
+    new_time = datetime(last_time.year, last_time.month, last_time.day, last_time.hour+1, 0, 0)
+    new_time = new_time + timedelta(hours=12)
+    if (last_time - stime).total_seconds()< 43200:
+        route_saver(new_stops, new_time, driver, conductor, bus)
+    else:
+        route_saver(new_stops, new_time+timedelta(hours=12), driver, conductor, bus)
 
+    return HttpResponseRedirect('/admin/bus/route/')

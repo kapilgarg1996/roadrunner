@@ -41,7 +41,7 @@ def get_routes(request):
 def get_route_detail(request, id):
     rid = id
     sql = ROUTE_DETAIL_QUERY
-    queryset = Route.objects.raw(sql, (rid))
+    queryset = Route.objects.raw(sql, (rid,))
     result = RouteDetailSerializer(queryset, many=True)
     return Response(result.data)
 
