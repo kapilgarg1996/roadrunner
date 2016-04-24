@@ -1,58 +1,43 @@
 import urllib, urllib2, json
 from django.http import HttpResponse
+from e_auth.models import *
+from django.utils import timezone
 
-class AuthorizeMiddleware(object):
-    def process_view(self, request, request_view, view_args, view_kwargs):
+def protector(func):
+    def decorator(request, *args, **kwargs):
         app_name = request.resolver_match.app_name
         from django.conf import settings
         allowed_apps = settings.EAUTH_ALLOWEDAPPS
         if app_name in allowed_apps:
-            return None
+            return func(request, *args, **kwargs)
 
         token = request.GET.get('token') or request.POST.get('token')
         response = HttpResponse()
         if token:
-            url = request.build_absolute_uri("/e-auth/authorize/")
-            mdict = {'token':token}
-            udata = urllib.urlencode(mdict)
-            req = urllib2.Request(url, udata)
-
             try:
-                res = urllib2.urlopen(req)
-                status = res.code
-            except:
-                retdict = {}
-                retdict['status'] = 400
-                retdict['data'] = "User Not Authorized"
-                retdict['detail'] = "Not Authenticated"
-                response.status_code = 400
-                serialdata = json.dumps(retdict)
-                response.content = serialdata
-                return response
-            if status==200:
-                content = res.read()
-                auth_status = json.loads(content)
-                if auth_status['authorized']==True:
-                    return None
+                auth = Authorize.objects.get(auth_token=token)
+            
+                if(timezone.now() < auth.expire_time):
+                    return func(request, *args, **kwargs)
                 else:
                     retdict = {}
                     retdict['status'] = 400
+                    retdict['data'] = "Token Has Expired"
+                    retdict['detail'] = "Invalid Token"
+                    response.status_code = 400
+                    serialdata = json.dumps(retdict)
+                    response.content = serialdata
+                    return response
+            except:
+                    retdict = {}
+                    retdict['status'] = 400
                     retdict['data'] = "User Not Authorized"
-                    retdict['detail'] = auth_status['authorized']
+                    retdict['detail'] = "Invalid Token"
                     response.status_code = 400
                     serialdata = json.dumps(retdict)
                     response.content = serialdata
                     return response
 
-            else:
-                retdict = {}
-                retdict['status'] = 400
-                retdict['data'] = "User Not Authorized"
-                retdict['detail'] = "Not Authenticated"
-                response.status_code = 400
-                serialdata = json.dumps(retdict)
-                response.content = serialdata
-                return response
         else:
             retdict = {}
             retdict['status'] = 404
@@ -62,3 +47,5 @@ class AuthorizeMiddleware(object):
             serialdata = json.dumps(retdict)
             response.content = serialdata
             return response
+
+    return decorator

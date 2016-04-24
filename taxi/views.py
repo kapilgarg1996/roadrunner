@@ -11,20 +11,24 @@ import urllib, urllib2
 from datetime import timedelta, datetime
 from django.utils import timezone
 import json
+from e_auth.middleware import protector
 
 @api_view(['GET'])
+@protector
 def get_taxis(request):
     taxis = Taxi.objects.filter(available=True)
     serial_taxi = TaxiSerializer(taxis, many=True)
     return Response(serial_taxi.data)
 
 @api_view(['GET'])
+@protector
 def get_places(request):
     places = Place.objects.filter(available=True)
     serial_places = PlaceSerializer(places, many=True)
     return Response(serial_places.data)
 
 @api_view(['GET'])
+@protector
 def taxi_detail(request):
     response = Response()
     response.status_code = 405
@@ -45,6 +49,7 @@ def taxi_detail(request):
 
 
 @api_view(['GET'])
+@protector
 def taxi_choice(request):
     choicedict = {}
     for key in request.GET.keys():
@@ -54,6 +59,7 @@ def taxi_choice(request):
     return Response(serial_taxi.data)
 
 @api_view(['POST'])
+@protector
 def book_taxi(request):
     #try:
         uid = request.POST['user']

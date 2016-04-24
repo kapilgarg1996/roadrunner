@@ -13,12 +13,13 @@ from rest_framework import viewsets
 from MySQLdb.cursors import SSDictCursor
 from django.core.mail import send_mail
 from django.utils import timezone
-
+from e_auth.middleware import protector
 
 # Create your views here.
 
 
 @api_view(['GET', 'POST'],)
+@protector
 def get_stops(request):
     sql = """select * from bus_stop where bus_stop.id != -1"""
     queryset = Stop.objects.raw(sql)
@@ -26,6 +27,7 @@ def get_stops(request):
     return Response(result.data)
 
 @api_view(['POST', 'GET'],)
+@protector
 def get_routes(request):
     source = request.POST['source']
     dest = request.POST['dest']
@@ -38,6 +40,7 @@ def get_routes(request):
     return Response(result.data)
 
 @api_view(['GET', 'POST'])
+@protector
 def get_route_detail(request, id):
     rid = id
     sql = ROUTE_DETAIL_QUERY
@@ -48,6 +51,7 @@ def get_route_detail(request, id):
 
 
 @api_view(['POST'])
+@protector
 def book_ticket(request):
     #try:
         uid = request.POST['user']

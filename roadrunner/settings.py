@@ -28,7 +28,7 @@ ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
 EAUTH_USER = 'runner.models.User'
 EAUTH_FIELDS = ['name', 'password']
-EAUTH_ALLOWEDAPPS = ['bus', 'admin', 'superuser', 'runner', 'e_auth']
+EAUTH_ALLOWEDAPPS = ['admin', 'superuser', 'e_auth']
 
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
@@ -75,7 +75,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'e_auth.middleware.AuthorizeMiddleware',
 ]
 
 ROOT_URLCONF = 'roadrunner.urls'

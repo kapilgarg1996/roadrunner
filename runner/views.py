@@ -13,6 +13,7 @@ from rest_framework import viewsets
 from MySQLdb.cursors import SSDictCursor
 from django.core.mail import send_mail
 from runner.models import *
+from e_auth.middleware import protector
 
 #from django.core.mail import send_mail
 
@@ -32,6 +33,7 @@ def index(request):
 
 
 @api_view(['GET'])
+@protector
 def get_user_detail(request, id):
     cursor = connection.cursor()
     uid = id
@@ -42,6 +44,7 @@ def get_user_detail(request, id):
     return Response(result.data)
 
 @api_view(['POST', 'GET'])
+@protector
 def get_user_by_name(request):
     if request.method=="GET":
         uname = request.GET['username']
@@ -55,6 +58,7 @@ def get_user_by_name(request):
         return Response("NO_DATA", status=404)
 
 @api_view(['GET'])
+@protector
 def get_user(request, id):
     uid = id
     try:
