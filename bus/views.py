@@ -53,7 +53,7 @@ def get_route_detail(request, id):
 @api_view(['POST'])
 @protector
 def book_ticket(request):
-    #try:
+    try:
         uid = request.POST['user']
         rid = request.POST['route']
         payment = request.POST['payment_status']
@@ -75,10 +75,10 @@ def book_ticket(request):
             response = Response()
             response.data = data
             return response
-    #except:
-    #    response = Response(status=405)
-    #    response.data = "Problem Encountered"
-    #    return response
+    except:
+        response = Response(status=405)
+        response.data = "Problem Encountered"
+        return response
 
 def check_seats(rid, numseats, seats_config):
     route = Route.objects.get(id=rid)

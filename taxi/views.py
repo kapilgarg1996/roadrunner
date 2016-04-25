@@ -66,7 +66,7 @@ def taxi_choice(request):
 @api_view(['POST'])
 @protector
 def book_taxi(request):
-    #try:
+    try:
         uid = request.POST['user']
         tid = request.POST['taxi']
         j_time = request.POST['journey_time']
@@ -89,10 +89,10 @@ def book_taxi(request):
         booking.save()
         serial_booking = BookingSerializer(booking)
         return Response(serial_booking.data)
-    #except:
-    #    response = Response(status=405)
-    #    response.data = "Problem Encountered"
-    #    return response
+    except:
+        response = Response(status=405)
+        response.data = "Problem Encountered"
+        return response
     
 
 
