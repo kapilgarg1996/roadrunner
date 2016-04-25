@@ -307,50 +307,7 @@ def confirm_signup(request):
 def confirm_password(request):
     response = Response()
     data = {}
-    if request.method=='GET':
-        try:
-            key = request.GET['key']
-        except:
-            data['status'] = 400
-            data['detail'] = 'Corrupted Url'
-            data['account'] = 'REQUEST_DENIED'
-            sdata = SignSerializer(data)
-            response.data = sdata.data
-            response.status_code = 400
-            return response
-
-        try:
-            valid_key = Validation.objects.get(key_data=key)
-        except:
-            data['status'] = 200
-            data['detail'] = 'Invalid Key'
-            data['request'] = 'INVALID_KEY'
-            sdata = PassRequestSerializer(data)
-            response.data = sdata.data
-            response.status_code = 200
-            return response
-
-        nowtime = timezone.now()
-        if(nowtime<valid_key.expire_time):
-            req = PassRequest.objects.get(validation_key=valid_key)
-            req.request_verified = True
-            req.save() 
-            data['status'] = 200
-            data['detail'] = 'Request Verified'
-            data['request'] = key
-            sdata = PassRequestSerializer(data)
-            response.data = sdata.data
-            response.status_code = 200
-            return response
-        else:
-            data['status'] = 200
-            data['detail'] = 'Key Has Expired'
-            data['request'] = 'KEY_EXPIRED'
-            sdata = PassRequestSerializer(data)
-            response.data = sdata.data
-            response.status_code = 200
-            return response
-    elif request.method=='POST':
+    if request.method=='POST':
         form = PassForm(request.POST)
         if form.is_valid():
             key = form.cleaned_data['key_field']
@@ -370,8 +327,9 @@ def confirm_password(request):
             pass_req = PassRequest.objects.get(validation_key=valid_key)    
             user = pass_req.user
             nowtime = timezone.now()
-            if pass_req.request_verified==True and pass_req.pending==True and nowtime<valid_key.expire_time:
+            if pass_req.pending==True and nowtime<valid_key.expire_time:
                 pass_req.pending = False
+                pass_req.verified = True
                 pass_req.save()
                 old_pass = getattr(user, settings.SUPERUSER_PASSFIELD)
                 setattr(user, settings.SUPERUSER_PASSFIELD, npass)
