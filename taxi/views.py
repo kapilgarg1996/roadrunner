@@ -32,7 +32,7 @@ def get_places(request):
 def taxi_detail(request):
     response = Response()
     response.status_code = 405
-    tid = request.GET['id']
+    tid = request.GET.get('id')
     if(tid):
         try:
             taxi = Taxi.objects.get(id=tid)
@@ -52,9 +52,14 @@ def taxi_detail(request):
 @protector
 def taxi_choice(request):
     choicedict = {}
+    choicedict['total_seats'] = 4
+    choicedict['taxi_type'] = 'Sedan'
+    choicedict['ac'] = False
+
     for key in request.GET.keys():
         choicedict[key] = request.GET[key]
-    taxis = Taxi.objects.filter(**choicedict)
+
+    taxis = Taxi.objects.filter(total_seats__gte=choicedict['total_seats'], taxi_type=choicedict['taxi_type'], ac=choicedict['ac'])
     serial_taxi = TaxiSerializer(taxis, many=True)
     return Response(serial_taxi.data)
 

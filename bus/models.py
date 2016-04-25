@@ -11,7 +11,7 @@ import json
 
 def_bus_config = '1'
 def_bus_config *= 56
-def_ticket = '0'*56
+def_ticket = '1'*56
 
 PAYMENT_STATUS = (
         ('DONE', 'Done'),

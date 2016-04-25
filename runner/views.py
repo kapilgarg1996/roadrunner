@@ -105,7 +105,7 @@ def taxi_form(request):
 
 def bus_form(request):
     form = forms.BusBookForm()
-    return render(request, 'runner/common.html', {'form':form, 'url':'/bus/book-ticket/', 'button':'Book Bus Ticket'})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/epay/paynow/', 'button':'Book Bus Ticket'})
 
 def generate_form(request):
     form = forms.AuthForm()

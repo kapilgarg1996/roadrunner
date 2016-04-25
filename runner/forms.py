@@ -4,6 +4,9 @@ from django.forms import ModelForm
 from runner.models import User
 from bus.models import *
 from taxi.models import *
+
+def_ticket = '0'*56
+
 class LoginForm(forms.Form):
     name = forms.CharField(label='Your Name', max_length=100)
     password = forms.CharField(label='Password', max_length=20, widget=forms.PasswordInput())
@@ -39,12 +42,14 @@ class RouteForm(forms.Form):
     time = forms.DateTimeField()
     token = forms.CharField(label='token', max_length=200)
 
-class BusBookForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.all(), to_field_name='id')
-    route = forms.ModelChoiceField(queryset=Route.objects.all(), to_field_name='id')
+class BusBookForm(forms.ModelForm):
+    rtype = forms.CharField()
+    token = forms.CharField(max_length=200)
     payment_status = forms.CharField()
-    seats = forms.IntegerField()
-    seats_config = forms.CharField()
+    class Meta:
+        model = Ticket
+        fields = ('user', 'route', 'seats', 'seats_config')
+
 class UserSignupForm(ModelForm):
     class Meta:
         model = User
@@ -63,9 +68,9 @@ class PassForm(forms.Form):
     repeat_pass = forms.CharField(max_length=100)
 
 class BookingForm(ModelForm):
-    rtype = forms.CharField(max_length=100)
-    amount = forms.IntegerField()
+    rtype = forms.CharField()
+    token = forms.CharField(max_length=200)
     class Meta:
         model = Booking
-        fields = ('user', 'taxi', 'payment_status', 'journey_time', 'source', 'dest')
+        fields = ('user', 'taxi', 'journey_time', 'source', 'dest')
 

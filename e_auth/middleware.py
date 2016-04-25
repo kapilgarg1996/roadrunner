@@ -14,7 +14,7 @@ def protector(func):
         token = request.GET.get('token') or request.POST.get('token')
         response = HttpResponse()
         if token:
-            try:
+            #try:
                 auth = Authorize.objects.get(auth_token=token)
             
                 if(timezone.now() < auth.expire_time):
@@ -28,7 +28,7 @@ def protector(func):
                     serialdata = json.dumps(retdict)
                     response.content = serialdata
                     return response
-            except:
+            #except:
                     retdict = {}
                     retdict['status'] = 400
                     retdict['data'] = "User Not Authorized"
