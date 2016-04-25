@@ -16,32 +16,41 @@ from django.utils import timezone
 from time import sleep
 from datetime import datetime
 import threading
-
-def save(route):
-    route.save()
+def increment(value, factor):
+    return value + factor
 def route_saver(stops, stime, driver, conductor, bus):
-    stime = stime - timedelta(minutes=30)
+    start_time = stime
     times=[stime]
-    i=0
-    for source in stops:
-        try:
-            stime = times[i] + timedelta(minutes=30)
-        except:
-            pass
-        for dest in stops:
-            if source != dest and stops.index(source) < stops.index(dest):
-                route = Route(source=source, dest=dest, start_time=stime, bus=bus, driver=driver, conductor=conductor)
+    routes = []
+    for i in range(0, len(stops)-1):
+        source = stops[i] ;
+        dest = stops[i+1] ;
+        route = Route(source=source, dest=dest, start_time=start_time, bus=bus, driver=driver, conductor=conductor)
+        route.save()
+        if (route.journey_time - start_time).total_seconds()< 10800:
+            start_time = route.journey_time + timedelta(minutes=30)
+        elif (route.journey_time - start_time).total_seconds()< 21600:
+            start_time = route.journey_time + timedelta(minutes=60)
+        elif (route.journey_time - start_time).total_seconds()< 43200:
+            start_time = route.journey_time + timedelta(minutes=90)
+        else:
+            start_time = route.journey_time + timedelta(minutes=120)
+        routes.append(route)
 
-                #thread = threading.Thread(name='save', target=save, args=[route])
-                #thread.start()
-                #thread.join(5)
-                route.save()
-                if i==0:
-                    times.append(route.journey_time)
+    for i in range(0, len(routes)-1):
+        for j in range(i+1, len(routes)):
+            t_fair = 0
+            if(j==i+1):
+                t_fair = routes[i].fair
+            source = routes[i].source
+            dest = routes[j].dest
+            start = routes[i].start_time
+            end = routes[j].journey_time
+            t_fair += routes[j].fair
+            route = Route(source=source, dest=dest, start_time=start, bus=bus, driver=driver, conductor=conductor, journey_time = end, fair=t_fair)
+            route.save()
 
-        i+= 1
-
-    return route.journey_time
+    return routes[len(routes)-1].journey_time
 
 def route_adder(request):
     stopids = []

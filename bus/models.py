@@ -98,10 +98,13 @@ class Route(models.Model):
         return str(self.source.name)+"("+str(self.source.city)+")"+"-"+str(self.dest.name)+"("+str(self.dest.city)+")"
 
     def save(self, *args, **kwargs):
-        datadict = gmaps(source=self.source.get_location(), dest=self.dest.get_location())
-        self.fair = self.bus.fair_ratio*datadict['distance']/1000
-        self.journey_time = self.start_time + timedelta(seconds=datadict['time'])
-        super(Route, self).save(*args, **kwargs)
+        if(self.journey_time and self.fair):
+            super(Route, self).save(*args, **kwargs)
+        else:
+            datadict = gmaps(source=self.source.get_location(), dest=self.dest.get_location())
+            self.fair = self.bus.fair_ratio*datadict['distance']/1000
+            self.journey_time = self.start_time + timedelta(seconds=datadict['time'])
+            super(Route, self).save(*args, **kwargs)
 
     class Meta:
         managed = True 
