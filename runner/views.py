@@ -101,7 +101,7 @@ def change_password(request):
 
 def taxi_form(request):
     form = forms.BookingForm()
-    return render(request, 'runner/common.html', {'form':form, 'url':'/taxi/book-taxi/', 'button':'Book Taxi'})
+    return render(request, 'runner/common.html', {'form':form, 'url':'/epay/paynow/', 'button':'Book Taxi'})
 
 def bus_form(request):
     form = forms.BusBookForm()

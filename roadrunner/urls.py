@@ -20,6 +20,7 @@ from rest_framework import routers
 import account
 
 urlpatterns = [
+    url(r'^epay/', include('epay.urls', namespace='epay', app_name='epay')),
     url(r'^bus/', include('bus.urls', namespace='bus', app_name='bus')),
     url(r'^taxi/', include('taxi.urls', namespace='taxi', app_name='taxi')),
     url(r'^superuser/', include('superuser.urls', namespace='superuser', app_name='superuser')),

@@ -11,12 +11,7 @@ class PlaceAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'city', 'state', 'pincode')
 
 class BookingAdmin(admin.ModelAdmin):
-    fieldlist = []
-    for field in Booking._meta.get_fields():
-        fieldlist.append(field.name)
-
-    list_display = fieldlist
-
+    pass
 admin.site.register(Taxi, TaxiAdmin)
 admin.site.register(Driver, DriverAdmin)
 admin.site.register(Place, PlaceAdmin)

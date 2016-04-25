@@ -23,7 +23,7 @@ def get_taxis(request):
 @api_view(['GET'])
 @protector
 def get_places(request):
-    places = Place.objects.filter(available=True)
+    places = Place.objects.all()
     serial_places = PlaceSerializer(places, many=True)
     return Response(serial_places.data)
 
@@ -74,10 +74,12 @@ def book_taxi(request):
         source = Place.objects.get(id=src)
         dest = Place.objects.get(id=dst)
         datadict = gmaps(source=urllib.quote(source.get_location()), dest=urllib.quote(dest.get_location()))
-        fair = taxi.fair_ratio*datadict['distance']/1000
+        fair = taxi.fair_ratio*datadict['distance']
+        fair = fair/1000
+        jtime = datetime.strptime(j_time, '%Y-%m-%d %H:%M:%S')
         j_etime = datetime.strptime(j_time, '%Y-%m-%d %H:%M:%S') + timedelta(seconds=datadict['time'])
     
-        booking = Booking(user=user, taxi = taxi, driver=driver, source=source, dest=dest, journey_time=j_time, journey_endtime = j_etime, booking_time=timezone.now(), fair = fair, payment_status = payment)
+        booking = Booking(user=user, taxi = taxi, driver=driver, source=source, dest=dest, journey_time=jtime, journey_endtime = j_etime, booking_time=timezone.now(), fair = fair, payment_status = payment)
 
         booking.save()
         serial_booking = BookingSerializer(booking)

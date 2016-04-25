@@ -40,8 +40,8 @@ class RouteForm(forms.Form):
     token = forms.CharField(label='token', max_length=200)
 
 class BusBookForm(forms.Form):
-    user = forms.IntegerField()
-    route = forms.IntegerField()
+    user = forms.ModelChoiceField(queryset=User.objects.all(), to_field_name='id')
+    route = forms.ModelChoiceField(queryset=Route.objects.all(), to_field_name='id')
     payment_status = forms.CharField()
     seats = forms.IntegerField()
     seats_config = forms.CharField()
@@ -63,6 +63,8 @@ class PassForm(forms.Form):
     repeat_pass = forms.CharField(max_length=100)
 
 class BookingForm(ModelForm):
+    rtype = forms.CharField(max_length=100)
+    amount = forms.IntegerField()
     class Meta:
         model = Booking
         fields = ('user', 'taxi', 'payment_status', 'journey_time', 'source', 'dest')

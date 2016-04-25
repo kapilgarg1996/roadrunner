@@ -28,7 +28,11 @@ ALLOWED_HOSTS = ['localhost', 'roadrunner.com']
 
 EAUTH_USER = 'runner.models.User'
 EAUTH_FIELDS = ['name', 'password']
+<<<<<<< HEAD
 EAUTH_ALLOWEDAPPS = ['admin', 'superuser', 'e_auth']
+=======
+EAUTH_ALLOWEDAPPS = ['admin', 'superuser', 'e_auth']
+>>>>>>> Taxi payment added
 
 # Application definition
 SUPERUSER_USER = 'runner.models.UserAbstract'
@@ -44,6 +48,7 @@ SUPERUSER_PASSFIELD = 'password'
 SUPERUSER_PHANDLER = 'runner.views.pass_handler'
 SUPERUSER_FORMTEMPLATE = 'runner/password.html'
 
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -56,6 +61,7 @@ INSTALLED_APPS = [
     'bus.apps.BusConfig',
     'taxi.apps.TaxiConfig',
     'superuser.apps.SuperuserConfig',
+    'epay.apps.EpayConfig',
     'rest_framework',
     'runner.apps.RunnerConfig',
     'django.contrib.admin',
