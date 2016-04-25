@@ -45,7 +45,6 @@ class RouteForm(forms.Form):
 class BusBookForm(forms.ModelForm):
     rtype = forms.CharField()
     token = forms.CharField(max_length=200)
-    payment_status = forms.CharField()
     class Meta:
         model = Ticket
         fields = ('user', 'route', 'seats', 'seats_config')
